@@ -1,0 +1,23 @@
+class monitor;
+  virtual inf vinf;
+  mailbox #(transaction) mon2sb;
+  
+  function new(virtual inf vinf,mailbox #(transaction) mon2sb);
+    this.vinf=vinf;
+    this.mon2sb=mon2sb;
+  endfunction
+  
+    task main();
+    transaction trans;
+    forever begin
+      trans = new();
+      #10; // Wait for DUT to process
+      trans.a = vinf.a;
+      trans.b = vinf.b;
+      trans.sum = vinf.sum;
+      trans.carry = vinf.carry;
+      trans.display("Monitor block");
+      mon2sb.put(trans); // Send transaction to scoreboard
+    end
+  endtask
+endclass
