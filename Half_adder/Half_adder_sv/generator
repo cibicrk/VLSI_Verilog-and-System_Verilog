@@ -1,1 +1,16 @@
-
+class generator;
+  mailbox #(transaction) gen2drive;
+  function new(mailbox #(transaction) gen2drive);
+    this.gen2drive = gen2drive;
+    endfunction
+  task main();
+    transaction trans;
+    repeat (6) begin
+      trans = new();
+      if (!trans.randomize()) // Randomize the transaction
+        $error("Failed to randomize transaction");
+      trans.display("Generator block");
+      gen2drive.put(trans); // Send transaction to driver
+    end
+  endtask
+endclass
