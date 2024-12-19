@@ -1,0 +1,32 @@
+//Normal test bench with coverage driven verification
+module halfaddertb;
+  reg a,b;
+  wire sum,carry;
+  halfadder DUT(a,b,sum,carry);
+  
+  covergroup ha_cover;
+    option.per_instance = 1;
+    coverpoint a{bins b0 = {0};
+                 bins b1 = {1};}
+    coverpoint b{bins b0 = {0};
+                 bins b1 = {1};}
+  endgroup
+   
+  ha_cover hc=new();
+  
+  initial 
+    begin
+    for (int i=0;i<2;i=i+1)
+      for(int j=0;j<2;j=j+1)
+        begin
+          a=i;
+          b=j;
+          #2;
+          hc.sample();
+          $display($time," a=%b,b=%b,sum=%b,carry=%b",a,b,sum,carry);
+        end
+         $display("Coverage Summary");
+         $display("a coverage : %0d%%",hc.a.get_coverage());
+         $display("b coverage : %0d%%",hc.b.get_coverage());
+    end
+endmodule
