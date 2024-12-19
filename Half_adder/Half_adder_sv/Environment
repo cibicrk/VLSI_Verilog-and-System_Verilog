@@ -1,0 +1,34 @@
+`include "transaction.sv"
+`include "generator.sv"
+`include "driver.sv"
+`include "monitor.sv"
+`include "scoreboard.sv"
+
+class environment;
+  generator gen;
+  driver drv;
+  monitor mon;
+  scoreboard sb;
+  mailbox #(transaction)gen2drive;
+  mailbox #(transaction) mon2sb;
+  virtual inf vinf;
+  
+  function new(virtual inf vinf);
+    this.vinf=vinf;
+    gen2drive=new();
+    mon2sb=new();
+    gen=new(gen2drive);
+    drv=new(vinf,gen2drive);
+    mon=new(vinf,mon2sb);
+    sb=new(mon2sb);
+  endfunction
+  
+   task main();
+    fork
+    gen.main();
+    drv.main();
+    mon.main();
+    sb.main();
+    join_none
+  endtask
+endclass
