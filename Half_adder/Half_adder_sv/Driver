@@ -1,0 +1,20 @@
+class driver;
+  virtual inf vinf;
+  mailbox #(transaction) gen2drive;
+  function new(virtual inf vinf,mailbox #(transaction) gen2drive);
+    this.vinf=vinf;
+    this.gen2drive=gen2drive;
+  endfunction
+  
+   task main();
+    transaction trans;
+    forever begin
+      gen2drive.get(trans); // Get transaction from generator
+      vinf.a = trans.a;
+      vinf.b = trans.b;
+      #1; // Wait for DUT to process
+      trans.sum = vinf.sum;
+      trans.carry = vinf.carry;
+    end
+  endtask
+endclass
