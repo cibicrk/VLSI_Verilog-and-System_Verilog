@@ -1,0 +1,16 @@
+
+`include "test.sv"
+`include "interface.sv"
+module top;
+  inf vinf();
+  test tst;
+  
+  halfadder DUT(.a(vinf.a),.b(vinf.b),.sum(vinf.sum),.carry(vinf.carry)); 
+  initial begin
+    tst = new(vinf);
+    tst.start();
+    #100;
+    $finish;
+  end
+endmodule
+  
