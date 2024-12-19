@@ -1,0 +1,22 @@
+class scoreboard;
+ 
+  mailbox #(transaction) mon2sb;
+  function new(mailbox #(transaction) mon2sb);
+    this.mon2sb=mon2sb;
+  endfunction
+  
+  task main();
+     transaction trans;
+    forever
+      begin
+    mon2sb.get(trans);
+    if((trans.sum == (trans.a ^ trans.b)) && (trans.carry == (trans.a&trans.b)))
+      begin
+        $display("Expected Result");
+      end
+        else
+          $error("Expected result != actual result");
+    trans.display("Scoreboard block");
+      end
+  endtask
+endclass
