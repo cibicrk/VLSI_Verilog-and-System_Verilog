@@ -1,1 +1,4 @@
-
+interface inf;
+  logic a, b;       // Inputs
+  logic sum, carry; // Outputs
+endinterface
