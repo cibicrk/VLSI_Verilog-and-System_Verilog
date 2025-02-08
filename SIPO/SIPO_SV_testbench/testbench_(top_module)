@@ -1,0 +1,23 @@
+`include "interface.sv"
+`include "test.sv"
+
+module tb;
+  reg clk, clr; 
+  inf intf(clk,clr);
+  test tst;
+  
+  SIPO_reg DUT(.Din(intf.Din),.clk(intf.clk),.clr(intf.clr),.Do(intf.Dout));
+  initial
+    begin
+      tst=new(intf);
+      tst.run();
+    end
+  initial begin
+    clk=0; 
+    clr=1;
+    #5 clr=0;
+     #100 $finish;
+  end
+  always #5 clk = ~clk;
+  
+endmodule
