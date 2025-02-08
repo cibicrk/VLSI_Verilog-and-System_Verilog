@@ -1,1 +1,21 @@
-
+interface inf(input logic clk,clr);
+  logic Din;
+  logic [3:0] Dout;
+  
+  clocking driver_i@(posedge clk);
+    output Din;
+    input Dout;
+    input clr;
+  endclocking
+  
+  clocking monitor_i@(posedge clk);
+    input Din;
+    input Dout;
+    input clr;
+  endclocking
+  
+  modport driv_m(clocking driver_i,input clk,clr);
+  modport mon_m(clocking monitor_i,input clk,clr);
+  endinterface
+      
+      
