@@ -1,0 +1,24 @@
+module testbench;
+  reg Din, clk, clr;
+  wire Do;
+  
+  SIPO_reg DUT (Din, clk, clr, Do);
+  
+  initial clk = 0;
+  
+  always #5 clk = ~ clk;
+  
+  initial begin
+    $monitor($time,"D = %b, clr = %b, Dout = %b", Din, clr, Do);
+    Din = 0; clr = 1;
+    #5 clr = 0;
+    #40 Din = 1;
+  end
+  
+  initial begin
+    $dumpfile ("dump.vcd");
+    $dumpvars ();
+    #100 $finish;
+  end
+  
+endmodule
